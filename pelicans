@@ -4,8 +4,25 @@ end
 
 repeat task.wait() until not game:GetService("Lighting"):FindFirstChild("LoadingScreen")
 
--- Load Tokyo UI Library
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/dohmai/Tokyo/main/Libraries/UI'))()
+-- Load Tokyo UI Library with error handling
+local Library
+local success, result = pcall(function()
+    return game:HttpGet("https://raw.githubusercontent.com/dohmai/Tokyo/main/Libraries/UI")
+end)
+
+if success and result then
+    local loadFunc = loadstring(result)
+    if loadFunc then
+        Library = loadFunc()
+        if not Library then
+            error("Tokyo UI Library loaded but returned nil")
+        end
+    else
+        error("Failed to compile Tokyo UI Library: loadstring returned nil")
+    end
+else
+    error("Failed to fetch Tokyo UI Library: " .. tostring(result))
+end
 
 local SilentAimSettings = {
     Enabled = false,
@@ -776,8 +793,9 @@ manipulation.calculate_point = function(origin, target_pos, target_char)
     return nil, nil
 end
 
--- Create Window
-local Window = Library.NewWindow({
+-- Create Window (Tokyo uses library global, not Library local)
+library = Library -- Set global for Tokyo's internal use
+local Window = library.NewWindow({
     title = 'pelican.win - Tokyo UI',
     size = UDim2.new(0, 550, 0, 650),
     position = UDim2.new(0, 250, 0, 150)
