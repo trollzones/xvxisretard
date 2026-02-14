@@ -5,7 +5,7 @@ end
 repeat task.wait() until not game:GetService("Lighting"):FindFirstChild("LoadingScreen")
 
 -- Load Tokyo UI Library
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/dohmai/Tokyo/main/Libraries/UI.lua'))()
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/dohmai/Tokyo/main/Libraries/UI'))()
 
 local SilentAimSettings = {
     Enabled = false,
